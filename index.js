@@ -1,58 +1,21 @@
-// const express = require('express');
-// const app = express();
-
-// const express = require('express'),
-//   morgan = require('morgan');
-
-const express = require('express'),
-    fs = require('fs'),
-    morgan = require('morgan'),
-    path = require('path');
-
-    let topTenMovies = [
-        {
-            title: 'The Godfather',
-            Director: 'Francis Ford Coppola'
-        },
-        {
-            title: 'The Godfather Part II',
-            Director: 'Francis Ford Coppola'
-        },
-        {
-            title: 'Schindler\' List',
-            Director: 'Steven Spielberg'
-        },
-        {
-            title: 'The Dark Knight',
-            Director: 'Christopher Nolan'
-        },
-        {
-            title: 'Forest Gump',
-            Director: 'Robert Zemeckis'
-        },
-        {
-            title: 'Pulp Fiction',
-            Director: 'Quentin Tarantino'
-        },
-        {
-            title: 'The Shawshank Redemption',
-            Director: 'Frank Darabont'
-        },
-        {
-            title: 'Inception',
-            Director: 'Christopher Nolan'
-        },
-        {
-            title: 'The Lion King',
-            Director: 'Rob Minkoff'
-        },
-        {
-            title: 'Black Panther',
-            Director: 'Ryan Coogler'
-        }
-    ]
+const {users, movies} = require("./data");
+const express = require('express');
+      morgan = require('morgan');
 
 const app = express();
+
+//Using the Morgan middleware library to log all requests
+app.use(morgan('common'));
+app.use(express.json()); 
+const path = require("path");
+
+//GET request for returning the JSON movie data
+  app.get('/movies', (req, res) => {
+    res.json(movies);
+  });
+
+
+
 
 app.use(morgan('common'));
 app.use('/topTenMovies', express.static('public'));
