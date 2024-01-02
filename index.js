@@ -51,13 +51,21 @@ const express = require('express'),
             Director: 'Ryan Coogler'
         }
     ]
-    
+
 const app = express();
 
 app.use(morgan('common'));
+app.use('/topTenMovies', express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Welcome to my app!');
+});
+
+app.get('/documentation', (req,res) =>{
+    res.sendFile('public/documentation.html',{ root:__dirname});
+});
+app.get('/topTenMovies', (req, res) =>{
+    res.json(topTenMovies);
 });
 
 app.get('/secreturl', (req, res) => {
