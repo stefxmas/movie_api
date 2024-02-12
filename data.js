@@ -18,6 +18,16 @@ let users = [
         director: 'Christopher Nolan',
         genre: 'Sci-Fi'
       }]
+    },
+    {
+      id:3,
+      fullname: 'Xmas Xmas',
+      email: 'xmasxmas@mail.com',
+      favMovies: [{
+        title: 'Lord of the Rings',
+        director: 'Peter Jackson',
+        genre: 'Super-Heros'
+      }]
     }
   
   ];
