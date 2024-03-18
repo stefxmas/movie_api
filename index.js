@@ -1,5 +1,5 @@
 const bodyParser = require("body-parser");
-const {users, movies} = require("./data");
+//const {users, movies} = require("./data");
 const express = require('express');
       morgan = require('morgan');
       app = express();   
@@ -7,6 +7,13 @@ const express = require('express');
       bodyPraiser = require('body-parser'),
 
 app.use(bodyParser.json());
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
+const Models = require('./models.js');
+
+const Movies = Models.Movie;
+const Users = Models.User;
 
 //create
 app.post('/users', (req, res) => {
@@ -91,11 +98,23 @@ const path = require("path");
   //   res.json(movies);
   // });
   app.get('/movies', (req, res) => {
-    res.status(200).json(movies)
+    Movies.find()
+.then((movies) => {
+res.status(200).json(movies);
+}).catch((err) => {
+console.error(err);
+res.status(500).send('Error: ' + err);
+});
 })
 
 app.get('/users', (req, res) => {
-  res.status(200).json(users)
+  Users.find()
+  .then((users) => {
+  res.status(200).json(users);
+  }).catch((err) => {
+  console.error(err);
+  res.status(500).send('Error: ' + err);
+  });
 })
 
 app.get('/genre', (req, res) => {
