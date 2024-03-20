@@ -19,13 +19,11 @@ const Users = Models.User;
 app.post('/users', (req, res) => {
   let newUser = req.body;
 
-  if (!newUser.name) {
-      newUser.id = uuid.v4();
-      Users.create(newUser);
-      res.status(201).json(newUser)
-  } else {
-      res.status(400).send('users need names')
-  }
+  then((user)=> {
+    res.status(200).json(user);
+}).catch((error)=>  {
+    res.status(400).send('ERR')
+})
 })
 
 //update 
@@ -130,15 +128,15 @@ res.status(500).send('Error: ' + err);
 });
 })
 
-// app.get('/users', (req, res) => {
-//   Users.find()
-//   .then((users) => {
-//   res.status(200).json(users);
-//   }).catch((err) => {
-//   console.error(err);
-//   res.status(500).send('Error: ' + err);
-//   });
-// })
+app.get('/users', (req, res) => {
+  Users.find()
+   .then((users) => {
+  res.status(200).json(users);
+  }).catch((err) => {
+   console.error(err);
+  res.status(500).send('Error: ' + err);
+   });
+ })
 
 app.get('/users/:Username', async (req, res) => {
   await Users.findOne({ Username: req.params.Username })
@@ -154,22 +152,31 @@ app.get('/users/:Username', async (req, res) => {
 
 
 app.get('/genre', (req, res) => {
-  res.status(200).json(genre)
-})
-
-
-
-  //Read
-app.get('/movies/:title', (req, res) => {
-  const { title } = req.params;
-   Movies.findOne( { Title: title })
+  const { Genre } = req.params;
+  Movies.find( {"Movies.Genre": Genre })
   .then((movie) => {
-    res.status(200).json(movie);
+    res.status(200).json(movie[0].Genre);
   })
   .catch(e=> {
       res.status(400).send('no such movie')
   })
 })
+
+
+
+  //Read
+app.get('/movies/:Title', (req, res) => {
+  const { Title } = req.params;
+   Movies.find( { "Movies.Title": Title })
+  .then((movie) => {
+    res.status(200).json(movie[0].Title);
+  })
+  .catch(e=> {
+      res.status(400).send('no such movie')
+  })
+})
+
+
 
 //read
 app.get('/movies/genre/:genreName', (req, res) => {
@@ -191,7 +198,7 @@ app.get('/movies/directors/:directorName', (req, res) => {
     res.status(200).json(movie[0].Director);
   })
   .catch(e=> {
-      res.status(400).send('no such movie')
+      res.status(400).send('no such director')
   })
 })
 
