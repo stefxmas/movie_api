@@ -4,7 +4,7 @@ const express = require('express');
       morgan = require('morgan');
       app = express();   
       uuid = require('uuid');
-      bodyPraiser = require('body-parser'),
+      bodyPraiser = require('body-parser')
 
 app.use(bodyParser.json());
 
@@ -17,7 +17,7 @@ const Users = Models.User;
 
 //create
 app.post('/users', (req, res) => {
-  let newUser = req.body;
+  //let newUser = req.body;
 
   then((user)=> {
     res.status(200).json(user);
@@ -69,7 +69,7 @@ app.post('/users/:id/:movieTitle', (req, res) => {
 app.delete('/users/:id/:movieTitle', (req, res) => {
   const { id, movieTitle } = req.params;
 
-  let user =user.find( user => user.id == id );
+ // let user =user.find( user => user.id == id );
 
   if (user) {
       user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
