@@ -7,6 +7,11 @@ const express = require('express');
       bodyPraiser = require('body-parser')
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -118,7 +123,7 @@ const path = require("path");
   // app.get('/movies', (req, res) => {
   //   res.json(movies);
   // });
-  app.get('/movies', (req, res) => {
+  app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
 .then((movies) => {
 res.status(200).json(movies);
@@ -128,7 +133,7 @@ res.status(500).send('Error: ' + err);
 });
 })
 
-app.get('/users', (req, res) => {
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   Users.find()
    .then((users) => {
   res.status(200).json(users);
@@ -138,20 +143,34 @@ app.get('/users', (req, res) => {
    });
  })
 
-app.get('/users/:Username', async (req, res) => {
-  await Users.findOne({ Username: req.params.Username })
-    .then((user) => {
-      res.json(user);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
+ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  // CONDITION TO CHECK ADDED HERE
+  if(req.user.Username !== req.params.Username){
+      return res.status(400).send('Permission denied');
+  }
+  // CONDITION ENDS
+  await Users.findOneAndUpdate({ Username: req.params.Username }, {
+      $set:
+      {
+          Username: req.body.Username,
+          Password: req.body.Password,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday
+      }
+  },
+      { new: true }) // This line makes sure that the updated document is returned
+      .then((updatedUser) => {
+          res.json(updatedUser);
+      })
+      .catch((err) => {
+          console.log(err);
+          res.status(500).send('Error: ' + err);
+      })
 });
 
 
 
-app.get('/genre', (req, res) => {
+app.get('/genre/:Genre', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { Genre } = req.params;
   Movies.find( {"Movies.Genre": Genre })
   .then((movie) => {
