@@ -23,8 +23,14 @@ const Users = Models.User;
 //create
 app.post('/users', (req, res) => {
   //let newUser = req.body;
-
-  then((user)=> {
+  let hashedPassword = Users.hashPassword(req.body.Password);
+  Users.create({
+    Username: req.body.Username,
+    Password: hashedPassword,   // Hashed password
+    Email: req.body.Email,
+    Birthday: req.body.Birthday
+  })
+  .then((user)=> {
     res.status(200).json(user);
 }).catch((error)=>  {
     res.status(400).send('ERR')
@@ -32,7 +38,7 @@ app.post('/users', (req, res) => {
 })
 
 //update 
-app.put('/users/:Username', (req, res) => {
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   //let user = Users.find( user => user.id == id);
   Users.findOneAndUpdate(
     { Username: req.params.Username },
@@ -51,10 +57,10 @@ app.put('/users/:Username', (req, res) => {
   }).catch((error)=>  {
       res.status(400).send('ERR')
   })
-})
+}) 
 
 //Add to Fav 
-app.post('/users/:id/:movieTitle', (req, res) => {
+app.post('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { id, movieTitle } = req.params;
 
   let user = users.find( user => user.id == id);
@@ -71,7 +77,7 @@ app.post('/users/:id/:movieTitle', (req, res) => {
 
 
 // Remove from fav
-app.delete('/users/:id/:movieTitle', (req, res) => {
+app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { id, movieTitle } = req.params;
 
  // let user =user.find( user => user.id == id );
@@ -85,7 +91,7 @@ app.delete('/users/:id/:movieTitle', (req, res) => {
 })
 
 //delete
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { id } = req.params;
 
    let user = Users.find(user.id == id );
@@ -99,7 +105,7 @@ app.delete('/users/:id', (req, res) => {
 
  })
 
-app.delete('/users/:Username', async (req, res) => {
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
