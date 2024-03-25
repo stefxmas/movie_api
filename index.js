@@ -9,6 +9,8 @@ const express = require('express');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const { check, validationResult } = require('express-validator');
+
 const cors = require('cors');
 app.use(cors());
 
