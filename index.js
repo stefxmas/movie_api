@@ -19,7 +19,7 @@ const passport = require('passport');
 require('./passport');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb+srv://stefanbozic:Vanja1312@cluster0.pgq5mpx.mongodb.net/movie_flix', { useNewUrlParser: true, useUnifiedTopology: true });
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
