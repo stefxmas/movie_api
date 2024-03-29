@@ -221,7 +221,7 @@ app.get('/genre/:Genre', passport.authenticate('jwt', { session: false }), (req,
   //Read
 app.get('/movies/:Title', (req, res) => {
   const { Title } = req.params;
-   Movies.find( { "Movies.Title": Title })
+   Movies.find( { "Title": Title })
   .then((movie) => {
     res.status(200).json(movie[0].Title);
   })
