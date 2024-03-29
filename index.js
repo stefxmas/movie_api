@@ -233,16 +233,16 @@ app.get('/movies/:Title', (req, res) => {
 
 
 //read
-app.get('/movies/genre/:genreName', (req, res) => {
-  const { genreName } = req.params;
-  Movies.find( {"Genre.Name": genreName})
-  .then((movie) => {
-    res.status(200).json(movie[0].Genre);
-  })
-  .catch(e=> {
-      res.status(400).send('no such movie')
-  })
-})
+// app.get('/movies/genre/:genreName', (req, res) => {
+//   const { genreName } = req.params;
+//   Movies.find( {"Genre.Name": genreName})
+//   .then((movie) => {
+//     res.status(200).json(movie[0].Genre);
+//   })
+//   .catch(e=> {
+//       res.status(400).send('no such movie')
+//   })
+// })
 
 //read
 app.get('/movies/directors/:directorName', (req, res) => {
@@ -259,7 +259,7 @@ app.get('/movies/directors/:directorName', (req, res) => {
 
 
 app.use(morgan('common'));
-app.use('/topTenMovies', express.static('public'));
+// app.use('/topTenMovies', express.static('public'));
 
 app.get('/', (req, res) => {
   res.send('Welcome to my app!');
@@ -268,13 +268,13 @@ app.get('/', (req, res) => {
 app.get('/documentation', (req,res) =>{
     res.sendFile('public/documentation.html',{ root:__dirname});
 });
-app.get('/topTenMovies', (req, res) =>{
-    res.json(topTenMovies);
-});
+// app.get('/topTenMovies', (req, res) =>{
+//     res.json(topTenMovies);
+// });
 
-app.get('/secreturl', (req, res) => {
-  res.send('This is a secret url with super top-secret content.');
-});
+// app.get('/secreturl', (req, res) => {
+//   res.send('This is a secret url with super top-secret content.');
+// });
 
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
