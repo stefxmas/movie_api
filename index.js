@@ -223,7 +223,7 @@ app.get('/movies/:Title', (req, res) => {
   const { Title } = req.params;
    Movies.find( { "Title": Title })
   .then((movie) => {
-    res.status(200).json(movie[0].Title);
+    res.status(200).json(movie);
   })
   .catch(e=> {
       res.status(400).send('no such movie')
