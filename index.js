@@ -120,19 +120,19 @@ app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: fal
 })
 
 //delete
-app.delete('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id } = req.params;
+// app.delete('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   const { id } = req.params;
 
-   let user = Users.find(user.id == id );
+//    let user = Users.find(user.id == id );
 
-   if (user) {
-       users = users.filter( user => user.id != id);
-       res.status(200).send( 'user ID has been removed');
-  } else {
-       res.status(400).send('no such user')
-   }
+//    if (user) {
+//        users = users.filter( user => user.id != id);
+//        res.status(200).send( 'user ID has been removed');
+//   } else {
+//        res.status(400).send('no such user')
+//    }
 
- })
+//  })
 
 app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndRemove({ Username: req.params.Username })
