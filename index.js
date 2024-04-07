@@ -89,35 +89,66 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 }) 
 
 //Add to Fav 
-app.post('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id, movieTitle } = req.params;
 
-  let user = users.find( user => user.id == id);
+// app.post('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   const { id, movieTitle } = req.params;
+
+//   let user = users.find( user => user.id == id);
   
-  if (user) {
-      user.favoriteMovies.push(movieTitle);
-      res.status(200).send(' text? ')
-  } else {
-      res.status(400).send('no such Title')
-  }
+//   if (user) {
+//       user.favoriteMovies.push(movieTitle);
+//       res.status(200).send(' text? ')
+//   } else {
+//       res.status(400).send('no such Title')
+//   }
  
-})
+// })
+
+
+// Try this way what i saw on the github
+app.post("/users/:Username/movies/:movieTitle", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  await Users.findOneAndUpdate(
+    { username: req.params.Username },
+    { $push: { favoriteMovies: req.params.movieTitle } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
 
 
 
 // Remove from fav
-app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { id, movieTitle } = req.params;
+// app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
+//   const { id, movieTitle } = req.params;
 
- let user =user.find( user => user.id == id );
+//  let user =user.find( user => user.id == id );
 
-  if (user) {
-      user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
-      res.status(200).send(' removed ')
-   } else {
-      res.status(400).send(' no such Title')
-   }
-})
+//   if (user) {
+//       user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
+//       res.status(200).send(' removed ')
+//    } else {
+//       res.status(400).send(' no such Title')
+//    }
+// })
+
+// DELETE Fav movie by moviename
+//Try this what i saw on github
+app.delete("/users/:Username/movies/:movieTitle", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  await Users.findOneAndUpdate({Username: req.params.Username},{ $pull: {favoriteMovies: req.params.name} }, {new:true})
+  .then((updatedUser) => {
+    res.json(updatedUser);
+  })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
 
 //delete
 // app.delete('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
