@@ -109,7 +109,7 @@ app.post('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false
 app.delete('/users/:id/:movieTitle', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { id, movieTitle } = req.params;
 
- // let user =user.find( user => user.id == id );
+ let user =user.find( user => user.id == id );
 
   if (user) {
       user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
