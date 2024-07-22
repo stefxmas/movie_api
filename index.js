@@ -8,8 +8,10 @@ const bodyPraiser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://stefanbozic:Vanja1312@cluster0.pgq5mpx.mongodb.net/movie_flix', { useNewUrlParser: true, useUnifiedTopology: true });
+
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
@@ -36,6 +38,16 @@ const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
+app.use(morgan('common'));
+// app.use('/topTenMovies', express.static('public'));
+
+app.get('/', (req, res) => {
+  res.send('Welcome to my app!');
+});
+
+app.get('/documentation', (req,res) =>{
+    res.sendFile('public/documentation.html',{ root:__dirname});
+});
 
 //create
 app.post('/users',[
@@ -301,16 +313,7 @@ app.get('/movies/directors/:directorName', (req, res) => {
 
 
 
-app.use(morgan('common'));
-// app.use('/topTenMovies', express.static('public'));
 
-app.get('/', (req, res) => {
-  res.send('Welcome to my app!');
-});
-
-app.get('/documentation', (req,res) =>{
-    res.sendFile('public/documentation.html',{ root:__dirname});
-});
 // app.get('/topTenMovies', (req, res) =>{
 //     res.json(topTenMovies);
 // });
