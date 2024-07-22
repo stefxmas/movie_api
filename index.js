@@ -1,14 +1,15 @@
 const bodyParser = require("body-parser");
 //const {users, movies} = require("./data");
 const express = require('express');
-      morgan = require('morgan');
-      app = express();   
-      uuid = require('uuid');
-      bodyPraiser = require('body-parser')
+const morgan = require('morgan');
+const app = express();   
+const uuid = require('uuid');
+const bodyPraiser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+const mongoose = require('mongoose');
+mongoose.connect('mongodb+srv://stefanbozic:Vanja1312@cluster0.pgq5mpx.mongodb.net/movie_flix', { useNewUrlParser: true, useUnifiedTopology: true });
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
@@ -30,8 +31,7 @@ let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://stefanbozic:Vanja1312@cluster0.pgq5mpx.mongodb.net/movie_flix', { useNewUrlParser: true, useUnifiedTopology: true });
+
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
