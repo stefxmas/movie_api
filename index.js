@@ -130,10 +130,25 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 
 
 // Try this way what i saw on the github
-app.post("/users/:Username/movies/:movieTitle", passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.post("/users/:Username/movies/:movieid", passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndUpdate(
     { username: req.params.Username },
-    { $push: { favoriteMovies: req.params.movieTitle } },
+    { $push: { FavoriteMovies: req.params.movieid } },
+    { new: true }
+  )
+    .then((updatedUser) => {
+      res.json(updatedUser);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    });
+});
+
+app.delete("/users/:Username/movies/:movieid", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  await Users.findOneAndUpdate(
+    { username: req.params.Username },
+    { $pull: { FavoriteMovies: req.params.movieid } },
     { new: true }
   )
     .then((updatedUser) => {
@@ -161,18 +176,7 @@ app.post("/users/:Username/movies/:movieTitle", passport.authenticate('jwt', { s
 //    }
 // })
 
-// DELETE Fav movie by moviename
-//Try this what i saw on github
-app.delete("/users/:Username/movies/:movieTitle", passport.authenticate('jwt', { session: false }), async (req, res) => {
-  await Users.findOneAndUpdate({Username: req.params.Username},{ $pull: {favoriteMovies: req.params.name} }, {new:true})
-  .then((updatedUser) => {
-    res.json(updatedUser);
-  })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error: " + err);
-    });
-});
+
 
 //delete
 // app.delete('/users/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
