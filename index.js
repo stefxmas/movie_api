@@ -132,7 +132,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (r
 // Try this way what i saw on the github
 app.post("/users/:Username/movies/:movieid", passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndUpdate(
-    { username: req.params.Username },
+    { Username: req.params.Username },
     { $push: { FavoriteMovies: req.params.movieid } },
     { new: true }
   )
@@ -147,7 +147,7 @@ app.post("/users/:Username/movies/:movieid", passport.authenticate('jwt', { sess
 
 app.delete("/users/:Username/movies/:movieid", passport.authenticate('jwt', { session: false }), async (req, res) => {
   await Users.findOneAndUpdate(
-    { username: req.params.Username },
+    { Username: req.params.Username },
     { $pull: { FavoriteMovies: req.params.movieid } },
     { new: true }
   )
